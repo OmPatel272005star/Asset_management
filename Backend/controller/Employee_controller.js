@@ -4,7 +4,6 @@ const addEmployee = async (req, res) => {
     try {
       const { FirstName, LastName, Email, PhoneNo } = req.body;
       
-      // Insert employee into the database
       await new Promise((resolve, reject) => {
         connection.query(
           'INSERT INTO Employee (FirstName, LastName, Email, PhoneNo) VALUES (?, ?, ?, ?)',
@@ -28,6 +27,31 @@ const addEmployee = async (req, res) => {
   };
   
 
+  const deleteEmployee = async (req, res) => {
+    try {
+      const { employeeId } = req.params; 
+      await new Promise((resolve, reject) => {
+        connection.query(
+          'DELETE FROM Employee WHERE EmployeeId = ?',
+          [employeeId],
+          (err, result) => {
+            if (err) {
+              console.error('Error:', err);
+              reject('Error deleting employee.');
+            } else {
+              resolve('Employee deleted successfully.');
+            }
+          }
+        );
+      });
+  
+      res.status(200).send('Employee deleted successfully.');
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('Error deleting employee.');
+    }
+  };
+
 module.exports={
-    addEmployee
+    addEmployee,deleteEmployee
 }
