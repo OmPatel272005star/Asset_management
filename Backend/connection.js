@@ -3,7 +3,7 @@ const mysql=require('mysql2');
 const mysqlConnection=mysql.createConnection({
     host:'localhost',
     user:'root',
-    password:'om@272005',
+    password:'1234',
     database:'assetmanagementdb'
 })
 
