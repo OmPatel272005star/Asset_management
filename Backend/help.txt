@@ -1,0 +1,18 @@
+employee-->
+add,update,delete,get all list,serch by id
+
+Admin
+add,delete,update,
+
+Asset 
+add,delete,update,get all,
+
+Category
+add,delete,update,
+
+allocation
+add,update,
+
+
+document
+add,delete
