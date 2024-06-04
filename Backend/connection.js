@@ -1,19 +1,19 @@
-const mysql=require('mysql2');
+const mysql = require('mysql2');
 
-const mysqlConnection=mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'1234',
-    database:'assetmanagementdb'
-})
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '1234',
+  database: 'assetmanagementdb'
 
-const connection=mysqlConnection.connect((err)=>{
-    if(err){
-        console.log('error in DB connection'+JSON.stringify(err,undefined,2));
-    }else{
-        console.log('DB connected successfully');
-    }
 });
 
-module.exports=connection;
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to database:', err);
+    return;
+  }
+  console.log('Connected to the database');
+});
 
+module.exports = connection;
