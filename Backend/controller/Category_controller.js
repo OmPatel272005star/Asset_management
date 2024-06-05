@@ -9,7 +9,7 @@ function addCategory(req, res) {
       INSERT INTO Category (Name, ParentCategoryId, Prefix, IsActive, IsDeleted)
       VALUES (?, ?, ?, ?, ?);
     `;
-   
+  
     connection.query(query, [name, parentCategoryId, prefix, isActive, isDeleted], (err, result) => {
       if (err) {
         return res.status(500).json({ message: 'Error adding category..' });
@@ -47,7 +47,7 @@ const updateCategory = async (req, res) => {
   
       return res.status(200).send(`Category updated successfully. ID: ${categoryId}`);
     } catch (err) {
-      res.status(500).send('Error updating category.' + err);
+      return res.status(500).send('Error updating category.' + err);
     }
   };
 
