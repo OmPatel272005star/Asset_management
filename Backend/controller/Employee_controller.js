@@ -2,30 +2,39 @@ const connection = require('../connection');
 
 const addEmployee = async (req, res) => {
     try {
-      const { FirstName, LastName, Email, PhoneNo } = req.body;
-      
-      await new Promise((resolve, reject) => {
-        connection.query(
-          'INSERT INTO Employee (FirstName, LastName, Email, PhoneNo) VALUES (?, ?, ?, ?)',
-          [FirstName, LastName, Email, PhoneNo],
-          (err, result) => {
-            if (err) {
-              console.error('Error:', err);
-              reject('Error adding employee....');
-            } else {
-              resolve('Employee added successfully.');
-            }
-          }
-        );
-      });
-  
-      res.status(201).send('Employee added successfully.');
+        const { FirstName, LastName, Email, PhoneNo } = req.body;
+
+        const result = await new Promise((resolve, reject) => {
+            connection.query(
+                'INSERT INTO Employee (FirstName, LastName, Email, PhoneNo) VALUES (?, ?, ?, ?)',
+                [FirstName, LastName, Email, PhoneNo],
+                (err, result) => {
+                    if (err) {
+                        console.error('Error:', err);
+                        reject('Error adding employee....');
+                    } else {
+                        resolve(result); // Pass the result of the query to the resolve callback
+                    }
+                }
+            );
+        });
+
+        // Assuming `result` here holds information about the added employee
+        const addedEmployee = {
+            id: result.insertId, // Assuming `insertId` holds the ID of the newly inserted employee
+            FirstName,
+            LastName,
+            Email,
+            PhoneNo
+        };
+
+        res.status(201).json({ message: 'Employee added successfully.', employee: addedEmployee });
     } catch (error) {
-      console.error('Error:', error);
-      res.status(500).send('Error adding employee..');
+        console.error('Error:', error);
+        res.status(500).send('Error adding employee..');
     }
-  };
-  
+};
+
 
   const deleteEmployee = async (req, res) => {
     try {
@@ -85,7 +94,63 @@ const updateEmployee = async (req, res) => {
     }
 };
 
+const searchById=async(req,res)=>{
+    try{
+        const{id}=req.params;
+        const sqlQuery=`SELECT * FROM Employee WHERE EmployeeId = ?`
+        let result = await new Promise((resolve, reject) => {
+            connection.query(sqlQuery, [id], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows); // Resolve with the rows fetched from the database
+                }
+            });
+        });
 
+        if(result.length>0){
+            const employee={
+               EmployeeId: result[0].EmployeeId,
+               FirstName:result[0].FirstName,
+               LastName:result[0].LastName,
+               Email:result[0].Email,
+               PhoneNo:result[0].PhoneNo,
+            }
+           return res.status(200).json({message:`employee with id ${id} found succesfully`,employee});
+        }else{
+            return res.status(404).json({message:`user with ${id} not found`});
+        }
+    }catch(err){
+        return res.status(500).json({message:"error in serching employee"});
+    }
+}
+
+const getAllEmployee=async(req,res)=>{
+    try{
+        const sqlQuery=`SELECT EmployeeId,FirstName,Email From Employee`;
+        let result=await new Promise((resolve,reject)=>{
+            connection.query(sqlQuery,[],
+                (err,result)=>{
+                    if(err){
+                      reject(err);
+                    }else{
+                      resolve(result);
+                    }
+                }
+            )
+        });
+
+        return res.status(200).json(result);
+
+    }catch(err){
+        return res.status(500).json({message:"error in getting employee"})
+    }
+}
 module.exports={
+<<<<<<< HEAD
     addEmployee,deleteEmployee,updateEmployee
 }
+=======
+    addEmployee,deleteEmployee,updateEmployee,searchById,getAllEmployee
+}
+>>>>>>> 5c81755b15600c7ef197025909f7c577309e1e83
