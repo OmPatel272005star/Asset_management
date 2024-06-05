@@ -98,13 +98,6 @@ const App = () => {
         <h1 className="text-2xl font-semibold">Home Page</h1>
       </div> 
 
-  
-
-
-
-
-
-
 
       <div className="category-section">
       <h2>Categories</h2>
